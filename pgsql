@@ -7,7 +7,7 @@ set -euo pipefail
 readonly SELF="$(basename ${BASH_SOURCE[0]})"
 readonly SELF_DIR="$(cd $(dirname $(readlink -f ${BASH_SOURCE[0]})) > /dev/null 2>&1 && pwd)"
 readonly OS="$(uname)"
-readonly VERSION="1.0.0"
+readonly VERSION="1.0.1"
 
 OPT_HELP=
 OPT_DEBUG=
@@ -15,6 +15,7 @@ OPT_VERBOSE=
 OPT_VERSION=
 
 OPT_CONFIG="/var/miki/config.yml"
+OPT_FILE=
 
 function error () {
   if [[ "${OS}" == "Darwin" ]]; then
@@ -45,7 +46,7 @@ function debug () {
 function parse_arguments () {
   debug ${FUNCNAME[0]} "$@"
 
-  local opts=$(getopt -n "${SELF}" --options C: --longoptions help,debug,verbose,config: -- "$@")
+  local opts=$(getopt -n "${SELF}" --options C:f: --longoptions help,debug,verbose,config:,file: -- "$@")
 
   if [[ $? != 0 ]]; then
     error "Failed to parse arguments. Aborting."
@@ -60,6 +61,7 @@ function parse_arguments () {
       (--verbose) OPT_VERBOSE=true; shift ;;
       (--version) OPT_VERSION=true; shift ;;
       (-C|--config) OPT_CONFIG=$2; shift 2 ;;
+      (-f|--file) OPT_FILE=$2; shift 2 ;;
       (*) break ;;
     esac
   done
@@ -89,6 +91,7 @@ OPTIONS:
       --verbose  Enable verbose output
       --version  Display program version info
   -C, --config   Set config source
+  -f, --file     Specify the SQL file to load
 EOF
   exit 0
 }
@@ -108,14 +111,26 @@ function query () {
   yq -y "$1" "${OPT_CONFIG}" | sed 2d
 }
 
+function run_psql () {
+  debug ${FUNCNAME[0]} "$@"
+
+  local password=$(query '.db.pass' "${OPT_CONFIG}")
+  local host=$(query '.db.host' "${OPT_CONFIG}")
+  local dbname=$(query '.db.db' "${OPT_CONFIG}")
+  local username=$(query '.db.user' "${OPT_CONFIG}")
+
+  sudo PGPASSWORD="${password}" psql --host="${host}" --dbname="${dbname}" \
+       --username="${username}" "$@"
+}
+
 function run () {
   debug ${FUNCNAME[0]} "$@"
 
-  sudo PGPASSWORD=$(query '.db.pass' "${OPT_CONFIG}") psql \
-       --host=$(query '.db.host' "${OPT_CONFIG}") \
-       --dbname=$(query '.db.db' "${OPT_CONFIG}") \
-       --username=$(query '.db.user' "${OPT_CONFIG}") \
-       "$@"
+  if [[ -n "${OPT_FILE}" ]]; then
+    run_psql "--file=${OPT_FILE}"
+  else
+    run_psql
+  fi
 }
 
 function main () {

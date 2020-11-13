@@ -9,6 +9,7 @@ pgsql
 - [Dependencies](#dependencies)
 - [Usage](#usage)
   + [Prompt](#prompt)
+  + [Loading files](#load)
   + [Miscellany](#miscellany)
 
 
@@ -32,6 +33,13 @@ Scripts for running Postgres commands based from Miki configuration.
 To enter the Postgres prompt, run:
 
     pgsql
+
+
+### <a name="Loading files"></a>
+
+To load an SQL file, run:
+
+    pgsql -f file.sql
 
 
 ### <a name="miscellany">Miscellany</a>
