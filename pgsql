@@ -7,7 +7,7 @@ set -euo pipefail
 readonly SELF="$(basename ${BASH_SOURCE[0]})"
 readonly SELF_DIR="$(cd $(dirname $(readlink -f ${BASH_SOURCE[0]})) > /dev/null 2>&1 && pwd)"
 readonly OS="$(uname)"
-readonly VERSION="1.0.1"
+readonly VERSION="1.0.2"
 
 OPT_HELP=
 OPT_DEBUG=
@@ -70,7 +70,7 @@ function parse_arguments () {
 function process_arguments () {
   debug ${FUNCNAME[0]} "$@"
 
-  if [[ -n "${OPT_HELP}" || "${#}" -lt 1 ]]; then
+  if [[ -n "${OPT_HELP}" ]]; then
     display_usage
   elif [[ -z "${OPT_CONFIG}" ]]; then
     display_usage
