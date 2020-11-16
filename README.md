@@ -16,7 +16,7 @@ pgsql
 <a name="overview">Overview</a>
 -------------------------------
 
-Scripts for running Postgres commands based from Miki configuration.
+Scripts for running Postgres commands on a Miki instance.
 
 
 <a name="dependencies">Dependencies</a>

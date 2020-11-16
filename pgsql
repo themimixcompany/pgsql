@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-#!/usr/bin/env bash
-
 set -euo pipefail
 
 readonly SELF="$(basename ${BASH_SOURCE[0]})"
