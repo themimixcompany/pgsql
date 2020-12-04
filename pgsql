@@ -42,7 +42,7 @@ function debug () {
 }
 
 function parse_arguments () {
-  debug ${FUNCNAME[0]} "$@"
+  debug "${FUNCNAME[0]}" "$@"
 
   local opts=$(getopt -n "${SELF}" --options C:f: --longoptions help,debug,verbose,config:,file: -- "$@")
 
@@ -66,7 +66,7 @@ function parse_arguments () {
 }
 
 function process_arguments () {
-  debug ${FUNCNAME[0]} "$@"
+  debug "${FUNCNAME[0]}" "$@"
 
   if [[ -n "${OPT_HELP}" ]]; then
     display_usage
@@ -78,7 +78,7 @@ function process_arguments () {
 }
 
 function display_usage () {
-  debug ${FUNCNAME[0]} "$@"
+  debug "${FUNCNAME[0]}" "$@"
 
   cat << EOF
 ${SELF} v${VERSION} [OPTIONS]...
@@ -95,7 +95,7 @@ EOF
 }
 
 function display_version () {
-  debug ${FUNCNAME[0]} "$@"
+  debug "${FUNCNAME[0]}" "$@"
 
   cat << EOF
 ${SELF} v${VERSION}
@@ -104,13 +104,13 @@ EOF
 }
 
 function query () {
-  debug ${FUNCNAME[0]} "$@"
+  debug "${FUNCNAME[0]}" "$@"
 
   yq -y "$1" "${OPT_CONFIG}" | sed 2d
 }
 
 function run_psql () {
-  debug ${FUNCNAME[0]} "$@"
+  debug "${FUNCNAME[0]}" "$@"
 
   local password=$(query '.db.pass' "${OPT_CONFIG}")
   local host=$(query '.db.host' "${OPT_CONFIG}")
@@ -122,7 +122,7 @@ function run_psql () {
 }
 
 function run () {
-  debug ${FUNCNAME[0]} "$@"
+  debug "${FUNCNAME[0]}" "$@"
 
   if [[ -n "${OPT_FILE}" ]]; then
     run_psql "--file=${OPT_FILE}"
@@ -132,7 +132,7 @@ function run () {
 }
 
 function main () {
-  debug ${FUNCNAME[0]} "$@"
+  debug "${FUNCNAME[0]}" "$@"
 
   parse_arguments "$@"
   process_arguments "$@"
