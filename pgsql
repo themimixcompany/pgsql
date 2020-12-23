@@ -5,7 +5,7 @@ set -euo pipefail
 readonly SELF="$(basename ${BASH_SOURCE[0]})"
 readonly SELF_DIR="$(cd $(dirname $(readlink -f ${BASH_SOURCE[0]})) > /dev/null 2>&1 && pwd)"
 readonly OS="$(uname)"
-readonly VERSION="1.0.2"
+readonly VERSION="1.0.3"
 
 OPT_HELP=
 OPT_DEBUG=
@@ -84,12 +84,12 @@ function display_usage () {
 ${SELF} v${VERSION} [OPTIONS]...
 
 OPTIONS:
-      --help     Show this help
-      --debug    Enable debugging mode
-      --verbose  Enable verbose output
-      --version  Display program version info
-  -C, --config   Set config source
-  -f, --file     Specify the SQL file to load
+      --help           Show this help
+      --debug          Enable debugging mode
+      --verbose        Enable verbose output
+      --version        Display program version info
+  -C, --config <PATH>  The configuration source
+  -f, --file <PATH>    The SQL file to load
 EOF
   exit 0
 }
