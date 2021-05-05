@@ -15,7 +15,7 @@ OPT_VERSION=
 OPT_CONFIG="/var/miki/config.yml"
 OPT_FILE=
 
-function error () {
+function error {
   if [[ "${OS}" == "Darwin" ]]; then
     echo "ERROR: ${@}" >&2
   else
@@ -25,7 +25,7 @@ function error () {
   exit 1
 }
 
-function warn () {
+function warn {
   if [[ "${OS}" == "Darwin" ]]; then
     echo "WARNING: ${@}" >&2
   else
@@ -33,7 +33,7 @@ function warn () {
   fi
 }
 
-function debug () {
+function debug {
   if [[ -n "${OPT_DEBUG}" ]]; then
     echo -n "** "
     echo "\${PWD}: ${PWD}"
@@ -41,7 +41,7 @@ function debug () {
   fi
 }
 
-function parse_arguments () {
+function parse_arguments {
   debug "${FUNCNAME[0]}" "$@"
 
   local opts=$(getopt -n "${SELF}" --options C:f: --longoptions help,debug,verbose,config:,file: -- "$@")
@@ -65,7 +65,7 @@ function parse_arguments () {
   done
 }
 
-function process_arguments () {
+function process_arguments {
   debug "${FUNCNAME[0]}" "$@"
 
   if [[ -n "${OPT_HELP}" ]]; then
@@ -77,7 +77,7 @@ function process_arguments () {
   fi
 }
 
-function display_usage () {
+function display_usage {
   debug "${FUNCNAME[0]}" "$@"
 
   cat << EOF
@@ -94,7 +94,7 @@ EOF
   exit 0
 }
 
-function display_version () {
+function display_version {
   debug "${FUNCNAME[0]}" "$@"
 
   cat << EOF
@@ -103,13 +103,13 @@ EOF
   exit 0
 }
 
-function query () {
+function query {
   debug "${FUNCNAME[0]}" "$@"
 
   yq -y "$1" "${OPT_CONFIG}" | sed 2d
 }
 
-function run_psql () {
+function run_psql {
   debug "${FUNCNAME[0]}" "$@"
 
   local password=$(query '.db.pass' "${OPT_CONFIG}")
@@ -121,7 +121,7 @@ function run_psql () {
        --username="${username}" "$@"
 }
 
-function run () {
+function run {
   debug "${FUNCNAME[0]}" "$@"
 
   if [[ -n "${OPT_FILE}" ]]; then
@@ -131,7 +131,7 @@ function run () {
   fi
 }
 
-function main () {
+function main {
   debug "${FUNCNAME[0]}" "$@"
 
   parse_arguments "$@"
